@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Management.Controllers
 {
-   /* [Authorize]*/
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CountAndFilter : ControllerBase
