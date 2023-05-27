@@ -8,7 +8,7 @@ using System.Data;
 
 namespace Hotel_Management.Controllers
 {
-    //[Authorize(Roles = UserRoles.Owner)]
+    [Authorize(Roles = UserRoles.Owner)]
     [Route("api/[controller]")]
     [ApiController]
     public class HotelManagement : ControllerBase
