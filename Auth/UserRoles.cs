@@ -1,4 +1,4 @@
-﻿namespace Hotel_Management.Auth
+namespace Hotel_Management.Auth
 {
     public class UserRoles
     {
