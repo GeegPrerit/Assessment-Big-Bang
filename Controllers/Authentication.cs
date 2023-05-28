@@ -1,4 +1,4 @@
-﻿using Hotel_Management.Auth;
+using Hotel_Management.Auth;
 using Hotel_Management.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
