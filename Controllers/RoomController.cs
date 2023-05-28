@@ -1,59 +1,100 @@
-﻿using Hotel_Management.Auth;
+using Hotel_Management.Auth;
 using Hotel_Management.Model;
 using Hotel_Management.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
+using System;
+using System.Collections.Generic;
 
 namespace Hotel_Management.Controllers
 {
-    [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Owner)]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class RoomController : ControllerBase
     {
-        private readonly IRoomRepository _RoomRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public RoomController(IRoomRepository RoomsRepository)
+        public RoomController(IRoomRepository roomRepository)
         {
-            _RoomRepository = RoomsRepository;
+            _roomRepository = roomRepository;
         }
+
         [HttpGet]
-        public ActionResult<ICollection<Room>> GetAllHotels()
+        public IActionResult GetAllRooms()
         {
-            var hotels = _RoomRepository.GetAllRoom();
-            return Ok(hotels);
+            try
+            {
+                var rooms = _roomRepository.GetAllRoom();
+                return Ok(rooms);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the rooms.");
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ICollection<Room>> GetHotelById(int id)
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Owner)]
+        public IActionResult GetRoomById(int id)
         {
-            var rooms = _RoomRepository.GetRoomById(id);
-            return Ok(rooms);
+            try
+            {
+                var room = _roomRepository.GetRoomById(id);
+                if (room == null)
+                    return NotFound("Room not found.");
+
+                return Ok(room);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the room.");
+            }
         }
 
         [HttpPost]
-        public ActionResult<ICollection<Room>> CreateHotel(Room rooms)
+        public IActionResult CreateRoom(Room room)
         {
-            _RoomRepository.AddRoom(rooms);
-            return Ok(rooms);
+            try
+            {
+                _roomRepository.AddRoom(room);
+                return CreatedAtAction(nameof(GetRoomById), new { id = room.Id }, room);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the room.");
+            }
         }
 
         [HttpPut("{id}")]
-        public ActionResult<ICollection<RoomController>> UpdateHotel(int id, Room rooms)
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Owner)]
+        public IActionResult UpdateRoom(int id, Room room)
         {
-            _RoomRepository.UpdateRoom(rooms, id);
-            return Ok(rooms);
+            try
+            {
+                _roomRepository.UpdateRoom(room, id);
+                return Ok(room);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the room.");
+            }
         }
 
         [HttpDelete("{id}")]
-            public ActionResult<ICollection<RoomController>> DeleteHotel(int id)
+        public IActionResult DeleteRoom(int id)
+        {
+            try
             {
-                _RoomRepository.DeleteRoom(id);
-                return Ok(id);
+                _roomRepository.DeleteRoom(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the room.");
             }
         }
     }
-
+}
