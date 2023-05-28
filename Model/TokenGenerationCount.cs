@@ -1,4 +1,4 @@
-﻿namespace Hotel_Management.Model
+namespace Hotel_Management.Model
 {
     public class TokenGenerationCount
     {
