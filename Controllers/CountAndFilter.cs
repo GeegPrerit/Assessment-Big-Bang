@@ -33,27 +33,5 @@ namespace Hotel_Management.Controllers
 
             return res;
         }
-
-        [HttpGet]
-        [Route("TokenGenerationCount")]
-        public async Task<IActionResult> GetTokenGenerationCount()
-        {
-            try
-            {
-                var userName = User.Identity.Name;
-                var tokenCount = await _hotelRepository.GetTokenGenerationCountByUserName(userName);
-                if (tokenCount != null)
-                {
-                    return Ok(tokenCount.Count);
-                }
-                return NotFound();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the token generation count.");
-            }
-        }
-
-
     }
 }
