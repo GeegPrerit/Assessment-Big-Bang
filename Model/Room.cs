@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 namespace Hotel_Management.Model
 {
     public class Room
@@ -9,6 +9,13 @@ namespace Hotel_Management.Model
         public int RoomNumber { get; set; }
 
         public decimal Price { get; set; }
+
+        public string GuestName { get; set; }
+
+        public DateTime StartingDate { get; set; }
+        public DateTime EndingDate { get; set; }
+
+        public int NumberOfGuest { get; set; }
 
         public string? RoomType { get; set; }
 
