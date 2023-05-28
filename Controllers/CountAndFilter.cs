@@ -1,4 +1,4 @@
-﻿using Hotel_Management.Repository;
+using Hotel_Management.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Management.Controllers
 {
-    [Authorize]
+   /* [Authorize]*/
     [Route("api/[controller]")]
     [ApiController]
     public class CountAndFilter : ControllerBase
@@ -34,18 +34,26 @@ namespace Hotel_Management.Controllers
             return res;
         }
 
-      /*  [HttpGet]
-        
+        [HttpGet]
+        [Route("TokenGenerationCount")]
         public async Task<IActionResult> GetTokenGenerationCount()
         {
-            var userName = User.Identity.Name;
-            var tokenCount = await _hotelRepository.GetTokenGenerationCountByUserName(userName);
-            if (tokenCount != null)
+            try
             {
-                return Ok(tokenCount.Count);
+                var userName = User.Identity.Name;
+                var tokenCount = await _hotelRepository.GetTokenGenerationCountByUserName(userName);
+                if (tokenCount != null)
+                {
+                    return Ok(tokenCount.Count);
+                }
+                return NotFound();
             }
-            return NotFound();
-        }*/
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the token generation count.");
+            }
+        }
+
 
     }
 }
